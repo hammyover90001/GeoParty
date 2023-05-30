@@ -23,20 +23,10 @@ difficulty = 0.7
 #so these are the images
 root.configure(bg = "#52C7D5")
 
-# VERY IMPORTANT!
-# VERY IMPORTANT!
-
-# VERY IMPORTANT!
-# VERY IMPORTANT!
-# VERY IMPORTANT!
-#if you want this code to run, you will have to change all of the directories to where you saved the images.
-# if you scroll down to the next set of images, (not this one, the one below)
-#you will have to change all of the directories, to where the folder ended up.
-#if you need help, just let me know and i will help you figure it out.
-#i attached the folder in the submition
-# basically it will look something like this: "drive/locaion/location/imagechecks/c1"
 
 root.title("geo party")
+# i am so sorry, but you will have to change all of these to the file path with your imagaes if you want to download this code
+# i know there is a better way, but i have not figured it out yet
 image1 = ImageTk.PhotoImage(Image.open(resource_path("levels/l1.png")))
 image2 = ImageTk.PhotoImage(Image.open(resource_path("levels/l2_2.jpg")))
 image3 = ImageTk.PhotoImage(Image.open(resource_path("levels/l3.jpg")))
@@ -55,20 +45,15 @@ image15 = ImageTk.PhotoImage(Image.open(resource_path("levels/l15_2.jpg")))
 thanks = ImageTk.PhotoImage(Image.open(resource_path("levels/thanks.png")))
 #made an image list to make it easier to use
 image_list = [image1, image2, image3, image4, image5, image6, image7, image8, image9, image10,image11,image12,image13,image14,image15,thanks]
+# arrray of images to keep them in order and make the level thing easier
 # basically this just tells you which image/level you are on
-status = Label(root, text= "Level 1 of " + str(len(image_list)), bg = "#52C7D5", bd=1, font=('Times', 20))
-usrin = ""
+status = Label(root, text= "Level 1 of " + str(len(image_list)), bg = "#52C7D5", bd=1, font=('Times', 20))#
+#this is at the top and just tells you what level you are on. the variable level is also used for fingidn the referance image. 
 level = 0
 def find_template(level):
     global labl_results
     template = ""
-    #texts = "calculating"
-    #labl_results.config(text = texts)
-    #need it to update but it wont work?
-#you will have to change the direcotry for this stuff too... sorry :/
-    print(level)
-    print(level)
-    print(level)
+
     level = level-1
     if level ==1:
         template = resource_path("checks/c1.png")
@@ -100,21 +85,24 @@ def find_template(level):
         template = resource_path("checks/c14.png")
     if level == 15:
         template = resource_path("checks/c15.png")
+    #the template is used as the referance image and it is used to search the submitted image to see if it is in there
+    
     filepath = filedialog.askopenfilename()
     # Load the image
     img = cv2.imread(filepath)
     temp = cv2.imread(template)
     res = cv2.matchTemplate(img, temp, cv2.TM_CCOEFF_NORMED)
-    print("got here")
     threshold = 0.6
-
-    #^^ that changes the difficulty. we could make it so the player can choose the difficulty and say that .4 is easy, .6 is normal, and .8+ is hard, and 1 is impossible
+    #the threshold is basically the similarity. the higher it is, the more precice the image has to be. .6 is fairly easy and just tells me what location you are in, although it is easy to cheat
+    #basically if one image is one tone of color, for example green grass. then any primarily green image that is submitted will be found to be the same
+    # i could make the threshold .7 but then it becomes borderline impossible
     loc = np.where(res >= threshold)
     print(res)
     if len(loc[0]) == 0:
         print("fail")
         labl_results = Label(root, text="LEVEL FAILED YOU LOOSER",bg = "#52C7D5", font=('Times',25)).grid(row=9,column=0)
         return False
+      #tells you if you passed or failed
 
     labl_results = Label(root, text="CONGRANTS. YOU DONE IT!",bg = "#52C7D5", font=('Times',25)).grid(row=9,column=0)
     print("pass")
